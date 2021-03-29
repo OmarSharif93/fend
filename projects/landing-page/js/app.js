@@ -20,19 +20,12 @@ const sections = document.querySelectorAll('section');
 
 //Making a Document Fragment
 const fragment = document.createDocumentFragment();
-
+ 
 
 // End Global Variables
 
 
-//Start Helper Functions
-//Remove class 'your-active-class' from all sections
-function removeActiveClass() {
-    sections.forEach(section => {
-        section.classList.remove('your-active-class');
-    })
-}
-// End Helper Functions
+
 
 
 //Begin Main Functions
@@ -74,6 +67,36 @@ function buildNav() {
     list.appendChild(fragment);
 }
 
+// Build menu 
+buildNav();
+
+
+
+//End Main Functions
+
+
+
+//Start Helper Functions
+//Get all links
+const links = document.querySelectorAll('a');
+
+//Add your-active-link to the first link list
+const link = document.querySelector('a').classList.add('your-active-link');
+
+//Remove class 'your-active-class' and 'your-active-link from all sections and links
+function removeActiveClass() {
+    //Remove Active Class from sections
+    sections.forEach(section => {
+        section.classList.remove('your-active-class');
+    })
+
+    //Remove Active Class from links
+    const links = document.querySelectorAll('a');
+    links.forEach(link =>{
+        link.classList.remove('your-active-link');
+    })
+
+}
 
 // Add class 'active' to section when near top of viewport
 function toggleActiveState() {
@@ -82,23 +105,28 @@ function toggleActiveState() {
             if (entry.isIntersecting) {
                 //Calling remove Active class
                 removeActiveClass();
-
-                //Add the active class to the current intersecting section
+                
+                //Add the active class to the current intersecting section and 
                 entry.target.classList.add('your-active-class');
+                links.forEach(link =>{
+                    if(link.getAttribute('href') === '#'+ entry.target.getAttribute('id')){
+                        link.classList.add('your-active-link');
+                    }
+                    
+                })
+                
             }
         })
-    }, { threshold: 0.8 });
+    }, { rootMargin:"0px 0px -300px 0px"});
 
     //observing Sections
     sections.forEach(section => {
         observer.observe(section);
     })
+
 }
+// End Helper Functions
 
-//End Main Functions
-
-// Build menu 
-buildNav();
 
 //Events
 // Set sections as active
